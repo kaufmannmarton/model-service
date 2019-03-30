@@ -1,19 +1,35 @@
 syntax = "proto3";
 
-package Model;
+package model;
+
+enum Response {
+    SUCCESS = 0;
+    INTERNAL_ERROR = 1;
+
+    EMAIL_TAKEN = 2;
+    NOT_FOUND = 3;
+}
 
 service Model {
-    rpc Create (CreateRequest) returns (CreateReply) {}
+    rpc Register (RegisterRequest) returns (RegisterReply) {}
+    rpc Activate (ActivateRequest) returns (ActivateReply) {}
     // rpc Update (UpdateRequest) returns (UpdateReply) {}
     // rpc Authenticate (AuthRequest) returns (AuthReply) {}
 }
 
-message CreateRequest {
+message RegisterRequest {
     string email = 1;
     string password = 2;
 }
 
-message CreateReply {
-    int64 id = 1;
-    string errors = 2;
+message RegisterReply {
+    Response response = 1;
+}
+
+message ActivateRequest {
+    uint32 id = 1;
+}
+
+message ActivateReply {
+    Response response = 1;
 }

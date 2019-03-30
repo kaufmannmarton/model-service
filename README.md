@@ -1,5 +1,5 @@
 ### Commands
 
 ```
-protoc -I proto/ proto/model.proto --go_out=plugins=grpc:proto
+protoc -I protos/ protos/model.proto --go_out=plugins=grpc:protos
 ```

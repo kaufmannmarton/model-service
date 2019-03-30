@@ -1,19 +1,42 @@
 version: '3'
 
 services:
-    model-service-go:
-      image: golang:1.12.1
-      working_dir: /go/src/model-service
-      volumes:
-        - './:.'
-      environment:
-        MONGO_HOST: model-service-mongo
-        MONGO_USERNAME: root
-        MONGO_PASSWORD: root
+  model-service-go:
+    image: golang:1.12.1
+    command: go run main.go
+    working_dir: /go/src/model-service
+    ports:
+      - 8000:3000
+    volumes:
+      - './:/go/src/model-service'
+    environment:
+      GO111MODULE: 'on'
+      DB_HOST: 'tcp(model-service-mysql)'
+      DB_NAME: 'model'
+      DB_USERNAME: 'admin'
+      DB_PASSWORD: 'root'
+    networks:
+      - model-service
 
-    model-service-mongo:
-      image: mongo:4.0.8
-      restart: always
-      environment:
-        MONGO_INITDB_ROOT_USERNAME: root
-        MONGO_INITDB_ROOT_PASSWORD: root
+  model-service-mysql:
+    image: mysql:8.0.15
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - 3333:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root '
+      MYSQL_DATABASE: 'model'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'root'
+    networks:
+      - model-service
+
+    # model-service-protobuf:
+    #   build:
+    #     context: .
+    #     dockerfile: Dockerfile-protobuf
+    #   volumes:
+    #     - './protos:/protos'
+
+networks:
+  model-service:
