@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package Model;
+
+service Model {
+    rpc Create (CreateRequest) returns (CreateReply) {}
+    // rpc Update (UpdateRequest) returns (UpdateReply) {}
+    // rpc Authenticate (AuthRequest) returns (AuthReply) {}
+}
+
+message CreateRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message CreateReply {
+    int64 id = 1;
+    string errors = 2;
+}
